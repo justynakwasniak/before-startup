@@ -1,0 +1,74 @@
+{
+  "transactions": [
+    {
+      "id": "1",
+      "amount": 100,
+      "status": "completed",
+      "date": "2024-06-20",
+      "currency": "USD"
+    },
+    {
+      "id": "2",
+      "amount": 250,
+      "status": "pending",
+      "date": "2024-06-22",
+      "currency": "EUR"
+    },
+    {
+      "id": "3",
+      "amount": 75,
+      "status": "failed",
+      "date": "2024-06-19",
+      "currency": "USD"
+    },
+    {
+      "id": "4",
+      "amount": 310,
+      "status": "completed",
+      "date": "2024-06-18",
+      "currency": "GBP"
+    },
+    {
+      "id": "5",
+      "amount": 180,
+      "status": "pending",
+      "date": "2024-06-21",
+      "currency": "EUR"
+    },
+    {
+      "id": "6",
+      "amount": 50,
+      "status": "completed",
+      "date": "2024-06-23",
+      "currency": "USD"
+    },
+    {
+      "id": "7",
+      "amount": 120,
+      "status": "failed",
+      "date": "2024-06-17",
+      "currency": "GBP"
+    },
+    {
+      "id": "8",
+      "amount": 500,
+      "status": "completed",
+      "date": "2024-06-16",
+      "currency": "EUR"
+    },
+    {
+      "id": "9",
+      "amount": 95,
+      "status": "pending",
+      "date": "2024-06-15",
+      "currency": "USD"
+    },
+    {
+      "id": "10",
+      "amount": 220,
+      "status": "completed",
+      "date": "2024-06-24",
+      "currency": "GBP"
+    }
+  ]
+}
