@@ -8,10 +8,10 @@ import 'dayjs/locale/pl';
 
 import { List, Checkbox, Typography, Space } from 'antd';
 
-dayjs.extend(relativeTime);
-dayjs.extend(isSameOrAfter);
-dayjs.extend(localizedFormat);
-dayjs.locale('pl');
+dayjs.extend(relativeTime); // Dodaje funkcję do obliczania czasu względnego, np. "2 dni temu"
+dayjs.extend(isSameOrAfter); // Dodaje funkcję do porównywania dat, np. "czy data jest taka sama lub późniejsza"
+dayjs.extend(localizedFormat); // Dodaje funkcje formatowania daty w lokalnym formacie
+dayjs.locale('pl'); 
 
 const { Title, Text } = Typography;
 
@@ -36,7 +36,7 @@ export default function EventList() {
   // Filtruj wydarzenia z ostatnich 7 dni
   const filteredEvents = showRecentOnly
     ? events.filter(e =>
-        dayjs(e.date).isSameOrAfter(dayjs().subtract(7, 'day'))
+        dayjs(e.date).isSameOrAfter(dayjs().subtract(20, 'day'))
       )
     : events;
 
@@ -54,11 +54,11 @@ export default function EventList() {
         onChange={e => setShowRecentOnly(e.target.checked)}
         style={{ marginBottom: 24 }}
       >
-        Pokaż tylko z ostatnich 7 dni
+        Pokaż tylko z ostatnich 20 dni
       </Checkbox>
 
       <List
-        bordered
+        bordered 
         dataSource={sorted}
         renderItem={event => (
           <List.Item style={{ borderRadius: 6 }}>

@@ -1,11 +1,14 @@
 //CONTEXT
 import { useUser } from './UserContext';
 import { Card, Button, Typography, Space } from 'antd';
+import { useLanguage } from './LanguageContext';
+
 
 const { Title, Text } = Typography;
 
 const Dashboard = () => {
   const { user, setUser } = useUser();
+  const { language } = useLanguage(); // użycie języka
 
   const handleLogin = () => {
     setUser({
@@ -17,25 +20,31 @@ const Dashboard = () => {
 
   return (
     <div style={{ maxWidth: 500, margin: '40px auto' }}>
-      <Card  style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+      <Card style={{ boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
-          <Title level={3}>Dashboard</Title>
+          <Title level={3}>
+            {language === 'pl' ? 'Panel główny' : 'Dashboard'}
+          </Title>
 
           {user ? (
             <Text type="success">
-              Witaj, użytkowniku o ID: <strong>{user.userId}</strong> (rola: <strong>{user.role}</strong>)
+              {language === 'pl' ? 'Witaj, użytkowniku o ID:' : 'Welcome, user ID:'}{' '}
+              <strong>{user.userId}</strong> ({language === 'pl' ? 'rola' : 'role'}: <strong>{user.role}</strong>)
             </Text>
           ) : (
-            <Text type="warning">Nie jesteś zalogowany.</Text>
+            <Text type="warning">
+              {language === 'pl' ? 'Nie jesteś zalogowany.' : 'You are not logged in.'}
+            </Text>
           )}
 
           <Button type="primary" onClick={handleLogin}>
-            Zaloguj (symulacja)
+            {language === 'pl' ? 'Zaloguj (symulacja)' : 'Log in (simulation)'}
           </Button>
         </Space>
       </Card>
     </div>
   );
 };
+
 
 export default Dashboard;

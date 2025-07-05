@@ -5,11 +5,8 @@
 // Tabela z Ant Design
 // Filtrowanie po statusie, kwocie lub dacie
 // Użycie axios, Table, Select, DatePicker
-
-
-
 import { useEffect, useState } from 'react';
-import { Table, Select, InputNumber, DatePicker, Space } from 'antd';
+import { Table, Select, InputNumber, DatePicker, Space, Button } from 'antd';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
@@ -17,28 +14,25 @@ import type { ColumnsType } from 'antd/es/table';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
-// Typ danych transakcji
 type Transaction = {
   id: string;
   amount: number;
   currency: string;
   status: 'pending' | 'completed' | 'failed';
-  date: string; // ISO string
+  date: string;
 };
 
-export default function TransactionTable(){ 
-  const [transactions, setTransactions] = useState<Transaction[]>([]); // Lista wszystkich transakcji
-  const [filtered, setFiltered] = useState<Transaction[]>([]); // Lista przefiltrowanych transakcji
+export default function TransactionTable() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [filtered, setFiltered] = useState<Transaction[]>([]);
 
-  const [statusFilter, setStatusFilter] = useState<string | undefined>(); // Filtr statusu
-  const [minAmount, setMinAmount] = useState<number | undefined>(); // Filtr minimalnej kwoty
-  const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null); // Filtr zakresu dat
+  const [statusFilter, setStatusFilter] = useState<string | undefined>();
+  const [minAmount, setMinAmount] = useState<number | undefined>();
+  const [dateRange, setDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs] | null>(null);
 
   useEffect(() => {
-    // Można podpiąć realne API, tu na razie mock
     const fetchData = async () => {
-      const response = await axios.get<Transaction[]>('http://localhost:4000/transactions')
-
+      const response = await axios.get<Transaction[]>('http://localhost:4000/transactions');
       setTransactions(response.data);
       setFiltered(response.data);
     };
@@ -46,22 +40,34 @@ export default function TransactionTable(){
   }, []);
 
   useEffect(() => {
-    let result = [...transactions]; 
+    let result = [...transactions];
 
     if (statusFilter) {
-      result = result.filter(tx => tx.status === statusFilter); // Filtruj po statusie
+      result = result.filter(tx => tx.status === statusFilter);
     }
-    if (minAmount !== undefined) { // Filtruj po minimalnej kwocie
+
+    if (minAmount !== undefined) {
       result = result.filter(tx => tx.amount >= minAmount);
     }
-    if (dateRange) { // Filtruj po zakresie dat
+
+    if (dateRange) {
       result = result.filter(tx => {
         const txDate = dayjs(tx.date);
-        return txDate.isAfter(dateRange[0].startOf('day')) && txDate.isBefore(dateRange[1].endOf('day'));
+        return (
+          txDate.isSameOrAfter(dateRange[0].startOf('day')) &&
+          txDate.isBefore(dateRange[1].endOf('day')) || txDate.isSame(dateRange[1].endOf('day'))
+        );
       });
     }
-    setFiltered(result); 
+
+    setFiltered(result);
   }, [statusFilter, minAmount, dateRange, transactions]);
+
+  const handleClearFilters = () => {
+    setStatusFilter(undefined);
+    setMinAmount(undefined);
+    setDateRange(null);
+  };
 
   const columns: ColumnsType<Transaction> = [
     {
@@ -70,7 +76,7 @@ export default function TransactionTable(){
       key: 'id',
     },
     {
-      title: 'Amount',
+      title: 'Kwota',
       dataIndex: 'amount',
       key: 'amount',
       render: (amount, record) => `${amount} ${record.currency}`,
@@ -81,7 +87,7 @@ export default function TransactionTable(){
       key: 'status',
     },
     {
-      title: 'Date',
+      title: 'Data',
       dataIndex: 'date',
       key: 'date',
       render: date => dayjs(date).format('YYYY-MM-DD'),
@@ -95,6 +101,7 @@ export default function TransactionTable(){
           placeholder="Wybierz status"
           allowClear
           onChange={value => setStatusFilter(value)}
+          value={statusFilter}
           style={{ width: 160 }}
         >
           <Option value="pending">Pending</Option>
@@ -106,11 +113,15 @@ export default function TransactionTable(){
           placeholder="Min kwota"
           min={0}
           onChange={value => setMinAmount(value || undefined)}
+          value={minAmount}
         />
 
         <RangePicker
-          onChange={(dates) => setDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs])}
+          onChange={(dates) => setDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs] | null)}
+          value={dateRange}
         />
+
+        <Button onClick={handleClearFilters}>Wyczyść filtry</Button>
       </Space>
 
       <Table

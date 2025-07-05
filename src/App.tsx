@@ -11,6 +11,11 @@ import DynamicForm from './DynamicForm';
 
 import { Layout, Menu } from 'antd';
 import type { MenuProps } from 'antd';
+import { LanguageProvider } from './LanguageContext';
+import LanguageSwitcher from './LanguageSwitcher';
+import SearchWithDebounce from './SearchWithDebounce';
+
+
 
 const { Header, Content } = Layout;
 
@@ -23,6 +28,7 @@ const items: MenuProps['items'] = [
   { label: <Link to="/calendar">Calendar</Link>, key: '/calendar' },
   { label: <Link to="/events">EventList</Link>, key: '/events' },
     { label: <Link to="/form">DynamicForm</Link>, key: '/form' },
+  { label: <Link to="/search">SearchWithDebounce</Link>, key: '/search' },
 
 ];
 
@@ -41,12 +47,16 @@ const AppMenu = () => {
 
 const App = () => {
   return (
+    <LanguageProvider>
+
     <UserProvider>
       <BrowserRouter>
         <Layout>
-<Header style={{ backgroundColor: '#fff', padding: 0 }}>
-            <AppMenu />
-          </Header>
+<Header style={{ display: 'flex', alignItems: 'center', backgroundColor: '#fff', padding: '0 16px' }}>
+  <AppMenu />
+  <LanguageSwitcher />
+</Header>
+
           <Content style={{ padding: '24px' }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
@@ -56,12 +66,15 @@ const App = () => {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/events" element={<EventList />} />
                             <Route path="/form" element={<DynamicForm />} />
+                            <Route path="/search" element={<SearchWithDebounce />} />
 
             </Routes>
           </Content>
         </Layout>
       </BrowserRouter>
     </UserProvider>
+    </LanguageProvider>
+
   );
 };
 
