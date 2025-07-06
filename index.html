@@ -2,6 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="
+  default-src 'self'; 
+  script-src 'self'; 
+  style-src 'self' 'unsafe-inline'; 
+  img-src 'self' data:; 
+  connect-src 'self' http://localhost:4000;
+">
+
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>startup intern</title>
@@ -11,3 +19,10 @@
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
+<!-- 
+Dyrektywa	Co kontroluje
+default-src	Domyślne źródła dla wszystkich zasobów
+script-src	Skąd mogą pochodzić skrypty JS
+style-src	Skąd mogą pochodzić style CSS
+img-src	Obrazy (np. favicony, zdjęcia)
+connect-src	API requesty – tu np. axios, fetch -->

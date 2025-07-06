@@ -14,6 +14,8 @@ import type { MenuProps } from 'antd';
 import { LanguageProvider } from './LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import SearchWithDebounce from './SearchWithDebounce';
+import ClientList from './ClientList';
+import CalendarView from './CalendarView';
 
 
 
@@ -29,6 +31,9 @@ const items: MenuProps['items'] = [
   { label: <Link to="/events">EventList</Link>, key: '/events' },
     { label: <Link to="/form">DynamicForm</Link>, key: '/form' },
   { label: <Link to="/search">SearchWithDebounce</Link>, key: '/search' },
+  { label: <Link to="/clients">ClientList</Link>, key: '/clients' },
+  { label: <Link to="/calendar-view">Kalendarz</Link>, key: '/calendar-view' },
+
 
 ];
 
@@ -48,7 +53,6 @@ const AppMenu = () => {
 const App = () => {
   return (
     <LanguageProvider>
-
     <UserProvider>
       <BrowserRouter>
         <Layout>
@@ -65,8 +69,11 @@ const App = () => {
               <Route path="/table" element={<TransactionTable />} />
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/events" element={<EventList />} />
-                            <Route path="/form" element={<DynamicForm />} />
-                            <Route path="/search" element={<SearchWithDebounce />} />
+              <Route path="/form" element={<DynamicForm />} />
+              <Route path="/search" element={<SearchWithDebounce />} />
+              <Route path="/clients" element={<ClientList />} />
+              <Route path="/calendar-view" element={<CalendarView />} />
+
 
             </Routes>
           </Content>
