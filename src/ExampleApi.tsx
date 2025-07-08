@@ -156,11 +156,10 @@
 // }
 
 ////////////////////////////////////
-//AXIOS
 import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
 import axios from 'axios';
-import { Input, Button, List, Checkbox, Typography, Spin, message } from 'antd';
+import { Input, Button, List, Checkbox, Typography, Spin, message, Space, Row, Col } from 'antd';
 
 const { Text, Title } = Typography;
 
@@ -172,15 +171,15 @@ interface Todo {
 }
 
 const ExampleApi = () => {
-  const [todos, setTodos] = useState<Todo[]>([]); // Lista zadań
-  const [newTitle, setNewTitle] = useState<string>('');// Tytuł nowego zadania
-  const [loading, setLoading] = useState<boolean>(false);// Stan ładowania
-  const [error, setError] = useState<string | null>(null);// Błąd pobierania danych
+  const [todos, setTodos] = useState<Todo[]>([]);
+  const [newTitle, setNewTitle] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
-    axios 
-      .get<Todo[]>('https://jsonplaceholder.typicode.com/todos?_limit=5') // Pobieranie pierwszych 5 zadańs
+    axios
+      .get<Todo[]>('https://jsonplaceholder.typicode.com/todos?_limit=5')
       .then(res => {
         setTodos(res.data);
         setLoading(false);
@@ -192,8 +191,8 @@ const ExampleApi = () => {
       });
   }, []);
 
-  const addTodo = () => { // Dodawanie nowego zadania
-    if (!newTitle.trim()) return; // Sprawdzenie, czy tytuł nie jest pusty
+  const addTodo = () => {
+    if (!newTitle.trim()) return;
     setLoading(true);
     axios
       .post<Todo>('https://jsonplaceholder.typicode.com/todos', {
@@ -213,12 +212,12 @@ const ExampleApi = () => {
       });
   };
 
-  const toggleComplete = (id: number) => { // Przełączanie stanu ukończenia zadania
-    const todo = todos.find(t => t.id === id); // Znajdowanie zadania po ID
+  const toggleComplete = (id: number) => {
+    const todo = todos.find(t => t.id === id);
     if (!todo) return;
     setLoading(true);
     axios
-      .put<Todo>(`https://jsonplaceholder.typicode.com/todos/${id}`, { // Aktualizacja zadania
+      .put<Todo>(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         ...todo,
         completed: !todo.completed,
       })
@@ -234,7 +233,7 @@ const ExampleApi = () => {
       });
   };
 
-  const deleteTodo = (id: number) => { // Usuwanie zadania
+  const deleteTodo = (id: number) => {
     setLoading(true);
     axios
       .delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
@@ -250,73 +249,74 @@ const ExampleApi = () => {
       });
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => { // Obsługa zmiany wartości inputa
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setNewTitle(e.target.value);
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 8 }}>
-      <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
-        Moja lista TODO (API test z axios)
-      </Title>
+    <Row justify="center" style={{ padding: '24px' }}>
+      <Col xs={24} sm={20} md={16} lg={12} xl={10}>
+        <div style={{ background: '#fff', borderRadius: 8, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+          <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
+            Moja lista TODO
+          </Title>
 
-      <Input.Group compact style={{ marginBottom: 20, display: 'flex' }}>
-        <Input
-          placeholder="Nowe zadanie"
-          value={newTitle}
-          onChange={handleChange}
-          disabled={loading}
-          onPressEnter={addTodo}
-          style={{ flexGrow: 1 }}
-        />
-        <Button type="primary" onClick={addTodo} disabled={loading || !newTitle.trim()}>
-          Dodaj
-        </Button>
-      </Input.Group>
-
-      {loading && (
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <Spin tip="Ładowanie..." />
-        </div>
-      )}
-
-      {error && (
-        <Text type="danger" style={{ display: 'block', marginBottom: 20 }}>
-          {error}
-        </Text>
-      )}
-
-      <List
-        bordered
-        dataSource={todos}
-        locale={{ emptyText: 'Brak zadań' }}
-        renderItem={todo => (
-          <List.Item
-            actions={[
-              <Button
-                danger
-                type="text"
-                onClick={() => deleteTodo(todo.id)}
-                disabled={loading}
-                key="delete"
-              >
-                Usuń
-              </Button>,
-            ]}
-          >
-            <Checkbox
-              checked={todo.completed}
-              onChange={() => toggleComplete(todo.id)}
+          <Space.Compact style={{ marginBottom: 20, width: '100%' }}>
+            <Input
+              placeholder="Nowe zadanie"
+              value={newTitle}
+              onChange={handleChange}
               disabled={loading}
-              style={{ marginRight: 12 }}
+              onPressEnter={addTodo}
             />
-            <Text delete={todo.completed} style={{ marginBottom: 0 }}>
-              {todo.title}
+            <Button type="primary" onClick={addTodo} disabled={loading || !newTitle.trim()}>
+              Dodaj
+            </Button>
+          </Space.Compact>
+
+          {loading && (
+            <div style={{ textAlign: 'center', marginBottom: 20 }}>
+              <Spin tip="Ładowanie..." />
+            </div>
+          )}
+
+          {error && (
+            <Text type="danger" style={{ display: 'block', marginBottom: 20 }}>
+              {error}
             </Text>
-          </List.Item>
-        )}
-      />
-    </div>
+          )}
+
+          <List
+            bordered
+            dataSource={todos}
+            locale={{ emptyText: 'Brak zadań' }}
+            renderItem={todo => (
+              <List.Item
+                actions={[
+                  <Button
+                    danger
+                    type="text"
+                    onClick={() => deleteTodo(todo.id)}
+                    disabled={loading}
+                    key="delete"
+                  >
+                    Usuń
+                  </Button>,
+                ]}
+              >
+                <Checkbox
+                  checked={todo.completed}
+                  onChange={() => toggleComplete(todo.id)}
+                  disabled={loading}
+                  style={{ marginRight: 12 }}
+                />
+                <Text delete={todo.completed}>{todo.title}</Text>
+              </List.Item>
+            )}
+          />
+        </div>
+      </Col>
+    </Row>
   );
 };
 

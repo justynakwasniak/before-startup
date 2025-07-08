@@ -18,19 +18,19 @@ const dummyData = [
 ];
 
 export default function SearchWithDebounce() {
-  const [results, setResults] = useState<string[]>(dummyData);
+  const [results, setResults] = useState<string[]>(dummyData); // Wyniki wyszukiwania
 
   // Funkcja wyszukiwania
-  const performSearch = (value: string) => {
-    const filtered = dummyData.filter(item =>
-      item.toLowerCase().includes(value.toLowerCase())
+  const performSearch = (value: string) => { // Funkcja wyszukiwania, która jest debounced
+    const filtered = dummyData.filter(item => // filtruj dane
+      item.toLowerCase().includes(value.toLowerCase()) // porównuj bez uwzględniania wielkości liter
     );
-    setResults(filtered);
+    setResults(filtered); // Ustaw wyniki wyszukiwania
   };
 
   // Zdebounce'owana funkcja (tworzona tylko raz)
-  const debouncedSearch = useMemo( 
-    () => debounce(performSearch, 500),
+  const debouncedSearch = useMemo(  // Użycie useMemo do stworzenia zdebounce'owanej funkcji
+    () => debounce(performSearch, 500), // Debounce ustawiony na 500ms
     []
   );
 

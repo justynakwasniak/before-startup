@@ -31,7 +31,7 @@ const mockEvents: Event[] = [
 ];
 
 export default function CalendarView() {
-  const [range, setRange] = useState<[Dayjs, Dayjs] | null>(null);
+  const [range, setRange] = useState<[Dayjs, Dayjs] | null>(null); // Stan przechowujący wybrany zakres dat
 
   const filteredEvents = mockEvents.filter(event => { // Filtruj wydarzenia na podstawie wybranego zakresu dat
     if (!range) return false; // Jeśli zakres nie jest ustawiony, nie filtruj

@@ -7,9 +7,7 @@ const { Title } = Typography;
 type Client = {
   id: string;
   name: string;
-    status: string;
-
- 
+  status: string;
 };
 
 export default function ClientList() {
@@ -35,16 +33,29 @@ export default function ClientList() {
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id' },
     { title: 'Imię i nazwisko', dataIndex: 'name', key: 'name' },
-        { title: 'Status', dataIndex: 'status', key: 'status' },
-
+    { title: 'Status', dataIndex: 'status', key: 'status' },
   ];
 
   return (
     <div style={{ padding: 24 }}>
-      <Title level={3}>Lista klientów</Title>
+      <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
+        Lista klientów
+      </Title>
 
-      {loading ? <Spin /> : error ? <Alert type="error" message={error} /> : (
-        <Table columns={columns} dataSource={clients} rowKey="id" />
+      {loading ? (
+        <Spin size="large" style={{ display: 'block', margin: '0 auto' }} />
+      ) : error ? (
+        <Alert type="error" message={error} />
+      ) : (
+        <div style={{ overflowX: 'auto' }}>
+          <Table
+            columns={columns}
+            dataSource={clients}
+            rowKey="id"
+            pagination={{ pageSize: 10 }}
+            scroll={{ x: 'max-content' }} // 👈 RESPONSYWNOŚĆ
+          />
+        </div>
       )}
     </div>
   );

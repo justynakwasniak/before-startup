@@ -6,10 +6,11 @@
 // Filtrowanie po statusie, kwocie lub dacie
 // Użycie axios, Table, Select, DatePicker
 import { useEffect, useState } from 'react';
-import { Table, Select, InputNumber, DatePicker, Space, Button } from 'antd';
+import { Table, Select, InputNumber, DatePicker, Space, Button, Tag } from 'antd';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import type { ColumnsType } from 'antd/es/table';
+import { TransactionStatus } from './enums';
 
 const { Option } = Select;
 const { RangePicker } = DatePicker;
@@ -18,9 +19,10 @@ type Transaction = {
   id: string;
   amount: number;
   currency: string;
-  status: 'pending' | 'completed' | 'failed';
+  status: TransactionStatus;
   date: string;
 };
+
 
 export default function TransactionTable() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -83,8 +85,24 @@ export default function TransactionTable() {
     },
     {
       title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+  dataIndex: 'status',
+  key: 'status',
+  render: (status: TransactionStatus) => {
+    let color = '';
+    switch (status) {
+      case TransactionStatus.Completed:
+        color = 'green';
+        break;
+      case TransactionStatus.Pending:
+        color = 'orange';
+        break;
+      case TransactionStatus.Failed:
+        color = 'red';
+        break;
+    }
+    return <Tag color={color}>{status.toUpperCase()}</Tag>;
+  },
+      
     },
     {
       title: 'Data',
@@ -100,7 +118,7 @@ export default function TransactionTable() {
         <Select
           placeholder="Wybierz status"
           allowClear
-          onChange={value => setStatusFilter(value)}
+          onChange={value => setStatusFilter(value as TransactionStatus)}
           value={statusFilter}
           style={{ width: 160 }}
         >
