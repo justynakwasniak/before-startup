@@ -107,7 +107,7 @@ const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
               </>
             )}
             <LanguageSwitcher />
-            <ThemeSwitcher /> {/* dodajemy nowy przycisk */}
+            <ThemeSwitcher /> 
           </Header>
 
           <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>

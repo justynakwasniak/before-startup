@@ -5,5 +5,5 @@
 html, body, #root {
   margin: 0;
   padding: 0;
-  background: #000; /* lub background: transparent; jeśli masz theming */
+  background: #000; 
 }
