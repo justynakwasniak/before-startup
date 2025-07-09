@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-do
 import { useState } from 'react';
 import { UserProvider } from './UserContext';
 import { LanguageProvider } from './LanguageContext';
+import { ConfigProvider, theme as antdTheme } from 'antd';
+import { DarkModeProvider, useDarkMode } from './DarkModeContext';
 
 import Dashboard from './Dashboard';
 import ExampleApi from './ExampleApi';
@@ -14,6 +16,7 @@ import LanguageSwitcher from './LanguageSwitcher';
 import SearchWithDebounce from './SearchWithDebounce';
 import ClientList from './ClientList';
 import CalendarView from './CalendarView';
+import ThemeSwitcher from './ThemeSwitcher';
 
 import {
   Layout,
@@ -58,63 +61,84 @@ const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   );
 };
 
-// 👇 Główny App
-const App = () => {
-  const screens = useBreakpoint();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+
+
+ const AppContent = () => {
+  const screens = useBreakpoint();// 👈 Hook do sprawdzania rozmiaru ekranu
+  const [drawerOpen, setDrawerOpen] = useState(false); // 👈 Stan do zarządzania otwarciem/zamknięciem szuflady
+  const { darkMode } = useDarkMode(); // 👈 Hook do zarządzania trybem ciemnym
+
+  const theme = {
+    algorithm: darkMode ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
+  };
 
   return (
-    <LanguageProvider>
-      <UserProvider>
-        <BrowserRouter>
-          <Layout>
-            <Header style={{ background: '#fff', padding: '0 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              {screens.md ? (
-                <Menu
-                  mode="horizontal"
-                  selectedKeys={[location.pathname]}
-                  items={menuItems}
-                  style={{ flex: 1 }}
-                />
-              ) : (
-                <>
-                  <Button
-                    icon={<MenuOutlined />}
-                    onClick={() => setDrawerOpen(true)}
-                  />
-                  <Drawer
-                    title="Menu"
-                    placement="left"
-                    onClose={() => setDrawerOpen(false)}
-                    open={drawerOpen}
-                    bodyStyle={{ padding: 0 }}
-                  >
-                    <AppMenu onMenuClick={() => setDrawerOpen(false)} />
-                  </Drawer>
-                </>
-              )}
-              <LanguageSwitcher />
-            </Header>
+    <ConfigProvider theme={theme}>
+      <BrowserRouter>
+        <Layout>
+          <Header style={{
+            background: darkMode ? '#141414' : '#fff',
+            padding: '0 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            {screens.md ? (
+              <Menu
+                mode="horizontal"
+                selectedKeys={[location.pathname]}
+                items={menuItems}
+                style={{ flex: 1 }}
+                theme={darkMode ? 'dark' : 'light'}
+              />
+            ) : (
+              <>
+                <Button icon={<MenuOutlined />} onClick={() => setDrawerOpen(true)} /> // 👈 Przycisk do otwierania szuflady
+                <Drawer
+                  title="Menu"
+                  placement="left"
+                  onClose={() => setDrawerOpen(false)}
+                  open={drawerOpen}
+                    styles={{ body: { padding: 0 } }}
 
-            <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/api" element={<ExampleApi />} />
-                <Route path="/transactions" element={<TransactionList />} />
-                <Route path="/table" element={<TransactionTable />} />
-                <Route path="/calendar" element={<Calendar />} />
-                <Route path="/events" element={<EventList />} />
-                <Route path="/form" element={<DynamicForm />} />
-                <Route path="/search" element={<SearchWithDebounce />} />
-                <Route path="/clients" element={<ClientList />} />
-                <Route path="/calendar-view" element={<CalendarView />} />
-              </Routes>
-            </Content>
-          </Layout>
-        </BrowserRouter>
-      </UserProvider>
-    </LanguageProvider>
+                >
+                  <AppMenu onMenuClick={() => setDrawerOpen(false)} />
+                </Drawer>
+              </>
+            )}
+            <LanguageSwitcher />
+            <ThemeSwitcher /> {/* dodajemy nowy przycisk */}
+          </Header>
+
+          <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/api" element={<ExampleApi />} />
+              <Route path="/transactions" element={<TransactionList />} />
+              <Route path="/table" element={<TransactionTable />} />
+              <Route path="/calendar" element={<Calendar />} />
+              <Route path="/events" element={<EventList />} />
+              <Route path="/form" element={<DynamicForm />} />
+              <Route path="/search" element={<SearchWithDebounce />} />
+              <Route path="/clients" element={<ClientList />} />
+              <Route path="/calendar-view" element={<CalendarView />} />
+            </Routes>
+          </Content>
+        </Layout>
+      </BrowserRouter>
+    </ConfigProvider>
   );
 };
 
+const App = () => (
+  <LanguageProvider>
+    <UserProvider>
+      <DarkModeProvider>
+        <AppContent />
+      </DarkModeProvider>
+    </UserProvider>
+  </LanguageProvider>
+);
+
 export default App;
+
