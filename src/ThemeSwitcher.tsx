@@ -1,5 +1,5 @@
 import { Switch } from 'antd';
-import { useDarkMode } from './DarkModeContext';
+import { useDarkMode } from './context/useDarkMode';
 import { BulbOutlined, BulbFilled } from '@ant-design/icons';
 
 const ThemeSwitcher = () => {

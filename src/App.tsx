@@ -1,9 +1,15 @@
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useState } from 'react';
-import { UserProvider } from './UserContext';
-import { LanguageProvider } from './LanguageContext';
+import { UserProvider } from './context/UserContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { ConfigProvider, theme as antdTheme } from 'antd';
-import { DarkModeProvider, useDarkMode } from './DarkModeContext';
+import { DarkModeProvider } from './context/DarkModeContext';
+import { useDarkMode } from './context/useDarkMode';
+import { AuthProvider } from './context/AuthContext';
+
+
+import PrivateRoute from './PrivateRoute';
+import Login from './Login';
 
 import Dashboard from './Dashboard';
 import ExampleApi from './ExampleApi';
@@ -25,15 +31,13 @@ import {
   Button,
   Grid,
 } from 'antd';
-import {
-  MenuOutlined,
-} from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-// 👇 Elementy menu
+// Menu items
 const menuItems: MenuProps['items'] = [
   { label: <Link to="/">Dashboard</Link>, key: '/' },
   { label: <Link to="/api">ExampleApi</Link>, key: '/api' },
@@ -47,7 +51,7 @@ const menuItems: MenuProps['items'] = [
   { label: <Link to="/calendar-view">Kalendarz</Link>, key: '/calendar-view' },
 ];
 
-// 👇 Komponent AppMenu (responsywny)
+// Menu component
 const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   const location = useLocation();
   return (
@@ -61,12 +65,11 @@ const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   );
 };
 
-
-
- const AppContent = () => {
-  const screens = useBreakpoint();// 👈 Hook do sprawdzania rozmiaru ekranu
-  const [drawerOpen, setDrawerOpen] = useState(false); // 👈 Stan do zarządzania otwarciem/zamknięciem szuflady
-  const { darkMode } = useDarkMode(); // 👈 Hook do zarządzania trybem ciemnym
+// Layout component (z hookami)
+const AppLayout = () => {
+  const screens = useBreakpoint();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { darkMode } = useDarkMode();
 
   const theme = {
     algorithm: darkMode ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
@@ -74,62 +77,72 @@ const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
 
   return (
     <ConfigProvider theme={theme}>
-      <BrowserRouter>
-        <Layout>
-          <Header style={{
+      <Layout>
+        <Header
+          style={{
             background: darkMode ? '#141414' : '#fff',
             padding: '0 16px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
-            {screens.md ? (
-              <Menu
-                mode="horizontal"
-                selectedKeys={[location.pathname]}
-                items={menuItems}
-                style={{ flex: 1 }}
-                theme={darkMode ? 'dark' : 'light'}
-              />
-            ) : (
-              <>
-                <Button icon={<MenuOutlined />} onClick={() => setDrawerOpen(true)} /> // 👈 Przycisk do otwierania szuflady
-                <Drawer
-                  title="Menu"
-                  placement="left"
-                  onClose={() => setDrawerOpen(false)}
-                  open={drawerOpen}
-                    styles={{ body: { padding: 0 } }}
+            justifyContent: 'space-between',
+          }}
+        >
+          {screens.md ? (
+            <Menu
+              mode="horizontal"
+              selectedKeys={[location.pathname]}
+              items={menuItems}
+              style={{ flex: 1 }}
+              theme={darkMode ? 'dark' : 'light'}
+            />
+          ) : (
+            <>
+              <Button icon={<MenuOutlined />} onClick={() => setDrawerOpen(true)} />
+              <Drawer
+                title="Menu"
+                placement="left"
+                onClose={() => setDrawerOpen(false)}
+                open={drawerOpen}
+                styles={{ body: { padding: 0 } }}
+              >
+                <AppMenu onMenuClick={() => setDrawerOpen(false)} />
+              </Drawer>
+            </>
+          )}
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </Header>
 
-                >
-                  <AppMenu onMenuClick={() => setDrawerOpen(false)} />
-                </Drawer>
-              </>
-            )}
-            <LanguageSwitcher />
-            <ThemeSwitcher /> 
-          </Header>
-
-          <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/api" element={<ExampleApi />} />
-              <Route path="/transactions" element={<TransactionList />} />
-              <Route path="/table" element={<TransactionTable />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/events" element={<EventList />} />
-              <Route path="/form" element={<DynamicForm />} />
-              <Route path="/search" element={<SearchWithDebounce />} />
-              <Route path="/clients" element={<ClientList />} />
-              <Route path="/calendar-view" element={<CalendarView />} />
-            </Routes>
-          </Content>
-        </Layout>
-      </BrowserRouter>
+        <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
+          <Routes>
+            <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+            <Route path="/api" element={<PrivateRoute><ExampleApi /></PrivateRoute>} />
+            <Route path="/transactions" element={<PrivateRoute><TransactionList /></PrivateRoute>} />
+            <Route path="/table" element={<PrivateRoute><TransactionTable /></PrivateRoute>} />
+            <Route path="/calendar" element={<PrivateRoute><Calendar /></PrivateRoute>} />
+            <Route path="/events" element={<PrivateRoute><EventList /></PrivateRoute>} />
+            <Route path="/form" element={<PrivateRoute><DynamicForm /></PrivateRoute>} />
+            <Route path="/search" element={<PrivateRoute><SearchWithDebounce /></PrivateRoute>} />
+            <Route path="/clients" element={<PrivateRoute><ClientList /></PrivateRoute>} />
+            <Route path="/calendar-view" element={<PrivateRoute><CalendarView /></PrivateRoute>} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Content>
+      </Layout>
     </ConfigProvider>
   );
 };
 
+// AppContent = BrowserRouter + AuthProvider + AppLayout
+const AppContent = () => (
+  <BrowserRouter>
+    <AuthProvider>
+      <AppLayout />
+    </AuthProvider>
+  </BrowserRouter>
+);
+
+// Główne App z zewnętrznymi providerami
 const App = () => (
   <LanguageProvider>
     <UserProvider>
@@ -141,4 +154,3 @@ const App = () => (
 );
 
 export default App;
-

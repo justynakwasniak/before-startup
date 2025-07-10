@@ -159,7 +159,7 @@
 import { useState, useEffect } from 'react';
 import type { ChangeEvent } from 'react';
 import axios from 'axios';
-import { Input, Button, List, Checkbox, Typography, Spin, message, Space, Row, Col } from 'antd';
+import { Input, Button, List, Checkbox, Typography, Spin, message, Space, Row, Col, Card } from 'antd';
 
 const { Text, Title } = Typography;
 
@@ -256,7 +256,7 @@ const ExampleApi = () => {
   return (
     <Row justify="center" style={{ padding: '24px' }}>
       <Col xs={24} sm={20} md={16} lg={12} xl={10}>
-        <div style={{ background: '#fff', borderRadius: 8, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+<Card style={{ borderRadius: 8, marginBottom: 24 }}>
           <Title level={3} style={{ textAlign: 'center', marginBottom: 24 }}>
             Moja lista TODO
           </Title>
@@ -314,7 +314,7 @@ const ExampleApi = () => {
               </List.Item>
             )}
           />
-        </div>
+</Card>
       </Col>
     </Row>
   );

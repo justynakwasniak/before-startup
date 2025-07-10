@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import moment from 'moment';
 import { Row, Col, Button, Typography } from 'antd';
+import { useDarkMode } from './context/useDarkMode'; // Upewnij się, że ścieżka jest poprawna
+
 
 moment.locale('pl'); // Ustawienie języka
 
@@ -11,6 +13,7 @@ const daysShort = moment.weekdaysShort(); // ["ndz", "pon", ...]
 
 export default function Calendar() {
   const [currentDate, setCurrentDate] = useState(moment());
+  const { darkMode } = useDarkMode(); // dodaj hook
 
   // Zmiana miesiąca
   const prevMonth = () => setCurrentDate(prev => moment(prev).subtract(1, 'month'));
@@ -71,10 +74,13 @@ export default function Calendar() {
                 span={3}
                 style={{
                   padding: 10,
-                  background: isToday ? '#bae7ff' : isCurrentMonth ? '#e6f7ff' : '#f5f5f5',
-                  borderRadius: 4,
-                  border: '1px solid #d9d9d9',
-                  color: isCurrentMonth ? 'black' : '#bfbfbf', 
+background: isToday
+  ? (darkMode ? '#0050b3' : '#bae7ff')
+  : isCurrentMonth
+  ? (darkMode ? '#141414' : '#e6f7ff')
+  : (darkMode ? '#1f1f1f' : '#f5f5f5'),
+color: isCurrentMonth ? (darkMode ? '#fff' : '#000') : (darkMode ? '#777' : '#bfbfbf'),
+border: '1px solid ' + (darkMode ? '#303030' : '#d9d9d9'),                  borderRadius: 4,
                   textAlign: 'center',
                   userSelect: 'none',
                 }}

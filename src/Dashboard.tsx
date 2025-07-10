@@ -1,7 +1,7 @@
 //CONTEXT
-import { useUser } from './UserContext';
+import { useUser } from './context/UserContext';
 import { Card, Button, Typography, Space } from 'antd';
-import { useLanguage } from './LanguageContext';
+import { useLanguage } from './context/LanguageContext';
 
 
 const { Title, Text } = Typography;
