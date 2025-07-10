@@ -6,6 +6,8 @@ import { ConfigProvider, theme as antdTheme } from 'antd';
 import { DarkModeProvider } from './context/DarkModeContext';
 import { useDarkMode } from './context/useDarkMode';
 import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
+
 
 
 import PrivateRoute from './PrivateRoute';
@@ -70,6 +72,8 @@ const AppLayout = () => {
   const screens = useBreakpoint();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { darkMode } = useDarkMode();
+  const { isAuthenticated, logout } = useAuth();
+
 
   const theme = {
     algorithm: darkMode ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
@@ -109,8 +113,16 @@ const AppLayout = () => {
               </Drawer>
             </>
           )}
-          <LanguageSwitcher />
-          <ThemeSwitcher />
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+  <LanguageSwitcher />
+  <ThemeSwitcher />
+  {isAuthenticated && (
+    <Button onClick={logout} type="primary" danger>
+      Wyloguj
+    </Button>
+  )}
+</div>
+          
         </Header>
 
         <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
