@@ -5,6 +5,8 @@
 // Tabela z Ant Design
 // Filtrowanie po statusie, kwocie lub dacie
 // Użycie axios, Table, Select, DatePicker
+//npx json-server --watch db.json --port 4000
+
 import { useEffect, useState } from 'react';
 import { Table, Select, InputNumber, DatePicker, Space, Button, Tag } from 'antd';
 import axios from 'axios';

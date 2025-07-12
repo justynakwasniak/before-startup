@@ -276,7 +276,7 @@ const ExampleApi = () => {
 
           {loading && (
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <Spin tip="Ładowanie..." />
+<Spin spinning={loading} fullscreen tip="Ładowanie..." />
             </div>
           )}
 

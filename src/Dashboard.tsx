@@ -1,22 +1,13 @@
 //CONTEXT
-import { useUser } from './context/UserContext';
-import { Card, Button, Typography, Space } from 'antd';
+import { useAuth } from './context/AuthContext';
+import { Card, Typography, Space } from 'antd';
 import { useLanguage } from './context/LanguageContext';
-
 
 const { Title, Text } = Typography;
 
 const Dashboard = () => {
-  const { user, setUser } = useUser();
-  const { language } = useLanguage(); // użycie języka
-
-  const handleLogin = () => {
-    setUser({
-      userId: '12345',
-      token: 'abcdefg-token',
-      role: 'user',
-    });
-  };
+  const { token, isAuthenticated } = useAuth();
+  const { language } = useLanguage();
 
   return (
     <div style={{ maxWidth: 500, margin: '40px auto' }}>
@@ -26,25 +17,23 @@ const Dashboard = () => {
             {language === 'pl' ? 'Panel główny' : 'Dashboard'}
           </Title>
 
-          {user ? (
+          {isAuthenticated ? (
             <Text type="success">
-              {language === 'pl' ? 'Witaj, użytkowniku o ID:' : 'Welcome, user ID:'}{' '}
-              <strong>{user.userId}</strong> ({language === 'pl' ? 'rola' : 'role'}: <strong>{user.role}</strong>)
+              ✅ {language === 'pl' ? 'Jesteś zalogowany.' : 'You are logged in.'}
+              <br />
+              <small style={{ wordBreak: 'break-all' }}>
+                {language === 'pl' ? 'Token:' : 'Token:'} <code>{token}</code>
+              </small>
             </Text>
           ) : (
             <Text type="warning">
-              {language === 'pl' ? 'Nie jesteś zalogowany.' : 'You are not logged in.'}
+              ⚠️ {language === 'pl' ? 'Nie jesteś zalogowany.' : 'You are not logged in.'}
             </Text>
           )}
-
-          <Button type="primary" onClick={handleLogin}>
-            {language === 'pl' ? 'Zaloguj (symulacja)' : 'Log in (simulation)'}
-          </Button>
         </Space>
       </Card>
     </div>
   );
 };
-
 
 export default Dashboard;
