@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem('auth_token'));
 
   const login = (username: string) => {
-    // 👇 Symulacja: login zawsze się udaje
     const fakeToken = `fake-token-for-${username}`;
     localStorage.setItem('auth_token', fakeToken);
     setToken(fakeToken);

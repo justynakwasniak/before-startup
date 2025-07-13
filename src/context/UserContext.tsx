@@ -1,24 +1,20 @@
 import  { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
-// Typy danych użytkownika
 type User = {
   userId: string;
   token: string;
   role: 'user' | 'admin';
 } | null;
 
-// Typ kontekstu
 type UserContextType = {
   user: User;
-  setUser: (user: User) => void; // Funkcja do ustawiania użytkownika
+  setUser: (user: User) => void; 
 };
 
-// Domyślna wartość
 const UserContext = createContext<UserContextType | undefined>(undefined); 
 
-// Provider
-export const UserProvider = ({ children }: { children: ReactNode }) => { //trzyma usera i setUser
+export const UserProvider = ({ children }: { children: ReactNode }) => { 
   const [user, setUser] = useState<User>(null);
 
   return (
@@ -28,8 +24,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => { //trzym
   );
 };
 
-// Hook do użycia kontekstu
-export const useUser = (): UserContextType => { //daje dostep do tych wartosci wszedzie
+export const useUser = (): UserContextType => {
   const context = useContext(UserContext);
   if (!context) {
     throw new Error('useUser must be used within a UserProvider');

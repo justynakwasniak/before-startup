@@ -11,36 +11,32 @@ import { List, Checkbox, Typography, Space } from 'antd';
 dayjs.extend(relativeTime); // Dodaje funkcję do obliczania czasu względnego, np. "2 dni temu"
 dayjs.extend(isSameOrAfter); // Dodaje funkcję do porównywania dat, np. "czy data jest taka sama lub późniejsza"
 dayjs.extend(localizedFormat); // Dodaje funkcje formatowania daty w lokalnym formacie
-dayjs.locale('pl'); 
+dayjs.locale('pl');
 
 const { Title, Text } = Typography;
 
-// Typ jednego wydarzenia
 type Event = {
   id: number;
   name: string;
-  date: string; // ISO format: '2025-06-20'
+  date: string; 
 };
 
-// Przykładowe dane
 const events: Event[] = [
-  { id: 1, name: 'Spotkanie zespołu', date: '2025-06-20' },
-  { id: 2, name: 'Demo klienta', date: '2025-06-23' },
-  { id: 3, name: 'Webinar produktowy', date: '2025-06-10' },
-  { id: 4, name: 'Wydanie nowej wersji', date: '2025-06-01' },
+  { id: 1, name: 'Spotkanie zespołu', date: '2025-07-20' },
+  { id: 2, name: 'Demo klienta', date: '2025-07-23' },
+  { id: 3, name: 'Webinar produktowy', date: '2025-07-10' },
+  { id: 4, name: 'Wydanie nowej wersji', date: '2025-07-01' },
 ];
 
 export default function EventList() {
   const [showRecentOnly, setShowRecentOnly] = useState(false);
 
-  // Filtruj wydarzenia z ostatnich 7 dni
   const filteredEvents = showRecentOnly
     ? events.filter(e =>
         dayjs(e.date).isSameOrAfter(dayjs().subtract(20, 'day'))
       )
     : events;
 
-  // Posortowane najnowsze na górze
   const sorted = [...filteredEvents].sort((a, b) =>
     dayjs(b.date).diff(dayjs(a.date))
   );

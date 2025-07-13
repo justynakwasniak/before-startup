@@ -25,7 +25,6 @@ type Transaction = {
   date: string;
 };
 
-
 export default function TransactionTable() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [filtered, setFiltered] = useState<Transaction[]>([]);

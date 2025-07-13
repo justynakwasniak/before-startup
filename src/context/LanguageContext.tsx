@@ -4,11 +4,7 @@
 //  Technologie: React Context
 //  Zakres:
 // Stworzenie LanguageContext
-
-
 // Hook useContext
-
-
 // Przełącznik języka w headerze
 
 import { createContext, useContext, useState } from 'react';

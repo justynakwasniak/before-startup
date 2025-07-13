@@ -5,25 +5,25 @@ const { Option } = Select;
 
 import type { UploadRequestOption } from 'rc-upload/lib/interface';
 
+
 const dummyRequest = ({ onSuccess }: UploadRequestOption) => { 
-  setTimeout(() => onSuccess && onSuccess("ok"), 500); // symuluje udany upload
+  setTimeout(() => onSuccess && onSuccess("ok"), 100); 
 };
 
 const DynamicForm = () => {
-  const [form] = Form.useForm(); // Inicjalizacja formularza
+  const [form] = Form.useForm();
 
   interface DocumentFormData {
     documents: {
       title?: string;
       type?: string;
-      file?: import('antd/es/upload/interface').UploadFile[]; // Typ pliku, może być array z plikami
+      file?: import('antd/es/upload/interface').UploadFile[];
     }[];
   }
 
   const handleFinish = (values: DocumentFormData) => {
- // Obsługa wysłania formularza
-    console.log('Submitted data:', values); // Wyświetla dane w konsoli
-    message.success('Zgłoszenia wysłane!');  // Pokazuje komunikat o sukcesie
+    console.log('Submitted data:', values);
+    message.success('Zgłoszenia wysłane!');  
   };
 
   return  (
@@ -83,7 +83,7 @@ const DynamicForm = () => {
                     label="Plik"
                     valuePropName="fileList"
                     getValueFromEvent={(e: import('antd/es/upload').UploadChangeParam) => Array.isArray(e) ? e : e?.fileList}
-                    rules={[{ required: true, message: 'Dodaj plik' }]}
+                    rules={[{message: 'Dodaj plik' }]}
                   >
                     <Upload
                       customRequest={dummyRequest}

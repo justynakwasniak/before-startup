@@ -6,8 +6,6 @@
 // Obsługa kalendarza i range-picker
 // Wyświetlenie wydarzeń w wybranym dniu
 
-
-
 import { useState } from 'react';
 import { DatePicker, Card, List, Typography } from 'antd';
 import dayjs, { Dayjs } from 'dayjs';
@@ -31,13 +29,13 @@ const mockEvents: Event[] = [
 ];
 
 export default function CalendarView() {
-  const [range, setRange] = useState<[Dayjs, Dayjs] | null>(null); // Stan przechowujący wybrany zakres dat
+  const [range, setRange] = useState<[Dayjs, Dayjs] | null>(null); 
 
-  const filteredEvents = mockEvents.filter(event => { // Filtruj wydarzenia na podstawie wybranego zakresu dat
-    if (!range) return false; // Jeśli zakres nie jest ustawiony, nie filtruj
-    const eventDate = dayjs(event.date); // Konwertuj datę wydarzenia na obiekt Dayjs
-    return eventDate.isSameOrAfter(range[0], 'day') && // Sprawdź, czy data wydarzenia jest w zakresie
-           eventDate.isSameOrBefore(range[1], 'day'); // Użyj 'day' do porównania tylko daty, bez czasu
+  const filteredEvents = mockEvents.filter(event => { 
+    if (!range) return false;
+    const eventDate = dayjs(event.date);
+    return eventDate.isSameOrAfter(range[0], 'day') &&
+           eventDate.isSameOrBefore(range[1], 'day');
   });
 
   return (

@@ -8,11 +8,8 @@ import { useDarkMode } from './context/useDarkMode';
 import { AuthProvider } from './context/AuthContext';
 import { useAuth } from './context/AuthContext';
 
-
-
 import PrivateRoute from './PrivateRoute';
 import Login from './Login';
-
 import Dashboard from './Dashboard';
 import ExampleApi from './ExampleApi';
 import TransactionList from './TransactionList';
@@ -39,7 +36,6 @@ import type { MenuProps } from 'antd';
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 
-// Menu items
 const menuItems: MenuProps['items'] = [
   { label: <Link to="/">Dashboard</Link>, key: '/' },
   { label: <Link to="/api">ExampleApi</Link>, key: '/api' },
@@ -53,7 +49,6 @@ const menuItems: MenuProps['items'] = [
   { label: <Link to="/calendar-view">Kalendarz</Link>, key: '/calendar-view' },
 ];
 
-// Menu component
 const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
   const location = useLocation();
   return (
@@ -64,10 +59,10 @@ const AppMenu = ({ onMenuClick }: { onMenuClick?: () => void }) => {
       items={menuItems}
       onClick={onMenuClick}
     />
-  );
+  )
 };
 
-// Layout component (z hookami)
+
 const AppLayout = () => {
   const screens = useBreakpoint();
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -122,9 +117,7 @@ const AppLayout = () => {
     </Button>
   )}
 </div>
-          
-        </Header>
-
+</Header>
         <Content style={{ padding: '16px', minHeight: 'calc(100vh - 64px)' }}>
           <Routes>
             <Route path="/" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
@@ -145,7 +138,6 @@ const AppLayout = () => {
   );
 };
 
-// AppContent = BrowserRouter + AuthProvider + AppLayout
 const AppContent = () => (
   <BrowserRouter>
     <AuthProvider>
@@ -154,7 +146,6 @@ const AppContent = () => (
   </BrowserRouter>
 );
 
-// Główne App z zewnętrznymi providerami
 const App = () => (
   <LanguageProvider>
     <UserProvider>

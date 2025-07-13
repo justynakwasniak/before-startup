@@ -4,7 +4,6 @@ import debounce from 'lodash/debounce';
 
 const { Search } = Input;
 
-// Przykładowe dane do wyszukiwania
 const dummyData = [
   'React',
   'Vue',
@@ -18,27 +17,23 @@ const dummyData = [
 ];
 
 export default function SearchWithDebounce() {
-  const [results, setResults] = useState<string[]>(dummyData); // Wyniki wyszukiwania
+  const [results, setResults] = useState<string[]>(dummyData);
 
-  // Funkcja wyszukiwania
-  const performSearch = (value: string) => { // Funkcja wyszukiwania, która jest debounced
-    const filtered = dummyData.filter(item => // filtruj dane
-      item.toLowerCase().includes(value.toLowerCase()) // porównuj bez uwzględniania wielkości liter
+  const performSearch = (value: string) => {
+    const filtered = dummyData.filter(item =>
+      item.toLowerCase().includes(value.toLowerCase()) 
     );
-    setResults(filtered); // Ustaw wyniki wyszukiwania
+    setResults(filtered);
   };
 
-  // Zdebounce'owana funkcja (tworzona tylko raz)
-  const debouncedSearch = useMemo(  // Użycie useMemo do stworzenia zdebounce'owanej funkcji
-    () => debounce(performSearch, 500), // Debounce ustawiony na 500ms
+  const debouncedSearch = useMemo( 
+    () => debounce(performSearch, 500),
     []
   );
 
-  // Zmiana zapytania i uruchomienie debounce
   const handleSearch = (value: string) => {
     debouncedSearch(value);
   };
-  // Czyszczenie debounce przy odmontowaniu
   useEffect(() => {
     return () => {
       debouncedSearch.cancel();

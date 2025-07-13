@@ -1,3 +1,4 @@
+//swagger
 import { useEffect, useState } from 'react';
 import { Table, Typography, Spin, Alert } from 'antd';
 import axios from 'axios';
@@ -23,7 +24,7 @@ export default function ClientList() {
       } catch {
         setError('Błąd podczas pobierania klientów');
       } finally {
-        setLoading(false);
+        setLoading(false); 
       }
     };
 
@@ -53,7 +54,7 @@ export default function ClientList() {
             dataSource={clients}
             rowKey="id"
             pagination={{ pageSize: 10 }}
-            scroll={{ x: 'max-content' }} // 👈 RESPONSYWNOŚĆ
+            scroll={{ x: 'max-content' }} 
           />
         </div>
       )}
